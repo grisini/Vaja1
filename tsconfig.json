@@ -13,5 +13,6 @@
   "include": [
     "src",
     "__tests__"
-  ]
+  ],
+  "extends": "expo/tsconfig.base"
 }
