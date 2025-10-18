@@ -11,7 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Employee, RootStackParamList } from '../../App';
+import { Employee, RootStackParamList } from '../App';
 
 type AddEmployeeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'AddEmployee'>;

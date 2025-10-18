@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './src/screens/HomeScreen';
-import AddEmployeeScreen from './src/screens/AddEmployeeScreen';
-import EmployeeDetailScreen from './src/screens/EmployeeDetailScreen';
+import HomeScreen from './screens/HomeScreen';
+import AddEmployeeScreen from './screens/AddEmployeeScreen';
+import EmployeeDetailScreen from './screens/EmployeeDetailScreen';
 
 export type Employee = {
   id: string;
