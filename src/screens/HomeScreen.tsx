@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Employee, RootStackParamList } from '../App';
@@ -13,20 +14,69 @@ import { Employee, RootStackParamList } from '../App';
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
   employees: Employee[];
+  onDelete?: (id: string) => void;
+  onClearAll?: () => void;
 };
 
-export default function HomeScreen({ navigation, employees }: HomeScreenProps) {
+export default function HomeScreen({ 
+  navigation, 
+  employees, 
+  onDelete, 
+  onClearAll 
+}: HomeScreenProps) {
+  const handleDelete = (employee: Employee) => {
+    Alert.alert(
+      'Delete Employee',
+      `Are you sure you want to delete ${employee.firstName} ${employee.lastName}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => onDelete?.(employee.id),
+        },
+      ]
+    );
+  };
+
+  const handleClearAll = () => {
+    if (employees.length === 0) return;
+    
+    Alert.alert(
+      'Clear All Employees',
+      'Are you sure you want to delete all employees? This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Clear All',
+          style: 'destructive',
+          onPress: () => onClearAll?.(),
+        },
+      ]
+    );
+  };
+
   const renderEmployee = ({ item, index }: { item: Employee; index: number }) => (
-    <TouchableOpacity
-      testID={`employee-${index}`}
-      style={styles.employeeItem}
-      onPress={() => navigation.navigate('EmployeeDetail', { employee: item })}
-    >
-      <Text style={styles.employeeName}>
-        {item.firstName} {item.lastName}
-      </Text>
-      <Text style={styles.employeePosition}>{item.position}</Text>
-    </TouchableOpacity>
+    <View style={styles.employeeItem}>
+      <TouchableOpacity
+        testID={`employee-${index}`}
+        style={styles.employeeContent}
+        onPress={() => navigation.navigate('EmployeeDetail', { employee: item })}
+      >
+        <Text style={styles.employeeName}>
+          {item.firstName} {item.lastName}
+        </Text>
+        <Text style={styles.employeePosition}>{item.position}</Text>
+      </TouchableOpacity>
+      {onDelete && (
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => handleDelete(item)}
+        >
+          <Text style={styles.deleteButtonText}>✕</Text>
+        </TouchableOpacity>
+      )}
+    </View>
   );
 
   return (
@@ -42,6 +92,16 @@ export default function HomeScreen({ navigation, employees }: HomeScreenProps) {
             <Text style={styles.emptyText}>No employees yet</Text>
             <Text style={styles.emptySubtext}>Tap the + button to add one</Text>
           </View>
+        }
+        ListHeaderComponent={
+          employees.length > 0 && onClearAll ? (
+            <TouchableOpacity
+              style={styles.clearAllButton}
+              onPress={handleClearAll}
+            >
+              <Text style={styles.clearAllText}>Clear All ({employees.length})</Text>
+            </TouchableOpacity>
+          ) : null
         }
       />
       <TouchableOpacity
@@ -65,8 +125,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   employeeItem: {
+    flexDirection: 'row',
     backgroundColor: '#ffffff',
-    padding: 16,
     marginBottom: 12,
     borderRadius: 8,
     shadowColor: '#000',
@@ -74,6 +134,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    alignItems: 'center',
+  },
+  employeeContent: {
+    flex: 1,
+    padding: 16,
   },
   employeeName: {
     fontSize: 18,
@@ -84,6 +149,16 @@ const styles = StyleSheet.create({
   employeePosition: {
     fontSize: 14,
     color: '#666',
+  },
+  deleteButton: {
+    padding: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteButtonText: {
+    fontSize: 20,
+    color: '#FF3B30',
+    fontWeight: 'bold',
   },
   emptyContainer: {
     flex: 1,
@@ -99,6 +174,18 @@ const styles = StyleSheet.create({
   emptySubtext: {
     fontSize: 14,
     color: '#bbb',
+  },
+  clearAllButton: {
+    backgroundColor: '#FF3B30',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  clearAllText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   fab: {
     position: 'absolute',

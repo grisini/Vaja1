@@ -8,10 +8,11 @@ This is a React Native mobile application built with Expo for managing employee 
 **Tech Stack**: React Native, Expo, TypeScript, React Navigation
 
 ## Purpose and Goals
-This project is a university assignment (RVIR – 01_vaja) designed to:
+This project is a university assignment (RVIR – 01_vaja & 02_vaja) designed to:
 - Demonstrate React Native component creation and navigation
 - Practice form validation and state management
 - Implement proper testing with testIDs for automated testing
+- **Implement persistent data storage with SQLite/AsyncStorage**
 - Follow mobile app development best practices
 
 ## Current State
@@ -21,7 +22,10 @@ The application is fully functional and running in the Replit environment with:
 - ✅ Employee detail view screen
 - ✅ React Navigation setup
 - ✅ All required testIDs implemented for CI/CD testing
+- ✅ **Persistent data storage using expo-sqlite (native) and AsyncStorage (web)**
+- ✅ Delete individual employees and clear all functionality
 - ✅ Expo web server running on port 5000
+- ✅ All tests passing (3/3)
 
 ## Project Architecture
 
@@ -32,12 +36,20 @@ The application is fully functional and running in the Replit environment with:
 ├── babel.config.js                  # Babel configuration for Jest
 ├── src/
 │   ├── App.tsx                      # Main app entry point with navigation
+│   ├── database/
+│   │   ├── database.native.ts       # SQLite implementation for native platforms
+│   │   └── database.web.ts          # AsyncStorage implementation for web
 │   └── screens/
 │       ├── HomeScreen.tsx           # Employee list with FlatList
 │       ├── AddEmployeeScreen.tsx    # Form for adding employees
 │       └── EmployeeDetailScreen.tsx # Employee detail view
 ├── __tests__/
 │   └── assignment.spec.tsx          # Jest test suite
+├── __mocks__/
+│   ├── expo-sqlite.js               # Mock for SQLite in tests
+│   └── @react-native-async-storage/async-storage.js  # Mock for AsyncStorage in tests
+├── docs/
+│   └── LEARNING_LOG.md              # Learning documentation for Vaja 2
 ├── assets/                          # App icons and images
 ├── app.json                         # Expo configuration
 ├── metro.config.js                  # Metro bundler configuration
@@ -71,7 +83,17 @@ The application is fully functional and running in the Replit environment with:
 - Implements testIDs: `pageDetail`, `detailName`, `detailPosition`, `detailEmail`
 
 ## Recent Changes
-- **October 18, 2025**: Project setup and test implementation
+- **October 18, 2025 (Vaja 2)**: Persistent data storage implementation
+  - Installed `expo-sqlite` and `@react-native-async-storage/async-storage`
+  - Implemented platform-specific database modules (native SQLite, web AsyncStorage)
+  - Added persistent storage for employees with optimistic updates
+  - Created database helper functions for CRUD operations
+  - Added delete individual employee and clear all employees functionality
+  - Created test mocks for expo-sqlite and AsyncStorage
+  - Created docs/LEARNING_LOG.md with implementation learnings
+  - All tests still passing (3/3) ✅
+
+- **October 18, 2025 (Vaja 1)**: Initial project setup and test implementation
   - Installed Node.js 20 and all required dependencies
   - Created complete React Native application structure
   - Moved App.tsx to src/App.tsx to match test import structure
@@ -81,7 +103,6 @@ The application is fully functional and running in the Replit environment with:
   - Configured workflow for development server
   - Implemented all three required screens with proper testIDs
   - Added email validation with user feedback
-  - All assignment tests passing successfully (3/3)
 
 ## Dependencies
 
@@ -92,6 +113,10 @@ The application is fully functional and running in the Replit environment with:
 - **react-native-web**: Web support for React Native
 - **react-dom**: React DOM renderer for web
 - **@expo/metro-runtime**: Expo Metro bundler runtime
+
+### Storage
+- **expo-sqlite**: SQLite database for native platforms (iOS/Android)
+- **@react-native-async-storage/async-storage**: Key-value storage for web platform
 
 ### Navigation
 - **@react-navigation/native**: Core navigation library
